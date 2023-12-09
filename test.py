@@ -14,12 +14,17 @@ team_attendance_avg = (
     .agg(Average_Attendance=("attendance", "mean"))
     .reset_index()
     .sort_values(by="Average_Attendance", ascending=False)
-    .drop(columns="venue_full_name", inplace=True)
+    .drop(columns="venue_full_name")
 )
+
+# dropping Team Lebron (its the last row in this dataframe)
+team_attendance_avg = team_attendance_avg.iloc[:-1]
+team_attendance_avg.shape  # checking shape of table
+team_attendance_avg.dtypes  # checking column types
 
 # creating gt table
 (
     gt.GT(data=team_attendance_avg)
     .cols_label(home_name="Team", Average_Attendance="Avg Attendance")
-    .fmt_number(decimals=2)
+    .fmt_number(columns="Average_Attendance", decimals=2)
 )
